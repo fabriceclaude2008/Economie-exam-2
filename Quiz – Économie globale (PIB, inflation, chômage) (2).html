@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz – Économie globale (PIB, inflation, chômage)</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1f2430;--mut:#6a7080;--bd:#d9d9d2;--ac:#2f5d8a;--ok:#1f7a4d;--okb:#e2f4ea;--ko:#b3361f;--kob:#fbe6e1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181e;--card:#1f242d;--tx:#e8eaef;--mut:#9aa1b2;--bd:#363d4b;--ac:#7fb0e0;--ok:#6fd1a0;--okb:#173326;--ko:#f08a76;--kob:#3a1f19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181e;--card:#1f242d;--tx:#e8eaef;--mut:#9aa1b2;--bd:#363d4b;--ac:#7fb0e0;--ok:#6fd1a0;--okb:#173326;--ko:#f08a76;--kob:#3a1f19;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.4rem;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
+label.row{display:flex;gap:10px;align-items:center;padding:6px 0;cursor:pointer}
+select{font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:10px 14px}
+button.p{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600}
+:root[data-theme="dark"] button.p{color:#10151c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.p{color:#10151c}}
+.opt{display:block;width:100%;text-align:left;margin:8px 0}
+.opt.ok{background:var(--okb);border-color:var(--ok);color:var(--ok)}
+.opt.ko{background:var(--kob);border-color:var(--ko);color:var(--ko)}
+.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.bar>i{display:block;height:100%;background:var(--ac);width:0}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:.85rem;margin-bottom:8px}
+.q{font-size:1.1rem;font-weight:600;margin:0 0 10px}
+.fb{margin-top:12px;padding:12px;border-radius:10px;background:var(--bg);border-left:4px solid var(--ac)}
+.fb.ok{border-color:var(--ok)}.fb.ko{border-color:var(--ko)}
+input[type=text]{font:inherit;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);width:140px}
+.big{font-size:2.4rem;font-weight:700;margin:4px 0}
+.err{border-top:1px solid var(--bd);padding:10px 0;font-size:.95rem}
+.tag{display:inline-block;font-size:.75rem;padding:1px 8px;border-radius:9px;background:var(--bg);border:1px solid var(--bd);color:var(--mut)}
+.hid{display:none}
+</style>
+</head>
+<body>
+<main>
+<h1>Quiz de révision – Économie globale</h1>
+<p class="sub">Cours 6 (PIB) · Cours 7 (inflation) · Cours 8 (marché du travail)</p>
+<div id="app"></div>
+</main>
+<script>
+var M=function(c,q,o,a,e){return{c:c,q:q,o:o,a:a,e:e}};
+var V=function(c,q,a,e){return{c:c,q:q,o:["Vrai","Faux"],a:a?0:1,e:e,f:1}};
+var N=function(c,q,n,t,e,u){return{c:c,q:q,n:n,t:t,e:e,u:u||""}};
+var R=["Moins de 15 ans / exclu de l’enquête","Population inactive","Chômeur","Personne en emploi"];
+var T=["Saisonnier","Frictionnel","Structurel","Conjoncturel"];
+function so(t){return '<svg viewBox="0 0 320 190" role="img" aria-label="'+t+'" style="width:100%;max-width:420px;display:block;margin:6px 0 10px;font:11px system-ui,sans-serif"><text x="160" y="13" text-anchor="middle" style="fill:var(--tx);font-weight:600">'+t+'</text>'}
+function bar(t,L,V){var mx=Math.max.apply(0,V.concat([0])),mn=Math.min.apply(0,V.concat([0])),r=mx-mn||1,y0=30+(mx/r)*120,w=280/L.length,s=so(t);s+='<line x1="30" x2="310" y1="'+y0+'" y2="'+y0+'" style="stroke:var(--mut)"/>';V.forEach(function(v,i){var h=Math.abs(v)/r*120,x=36+i*w,y=v>=0?y0-h:y0,cx=x+(w-12)/2;s+='<rect x="'+x+'" y="'+y+'" width="'+(w-12)+'" height="'+h+'" rx="2" style="fill:'+(v<0?'var(--ko)':'var(--ac)')+'"/><text x="'+cx+'" y="'+(v>=0?y-4:y+h+11)+'" text-anchor="middle" style="fill:var(--tx)">'+v+'</text><text x="'+cx+'" y="178" text-anchor="middle" style="fill:var(--mut)">'+L[i]+'</text>'});return s+'</svg>'}
+function line(t,L,S){var al=[].concat.apply([],S.map(function(s){return s.v})),mx=Math.max.apply(0,al),mn=Math.min.apply(0,al),r=(mx-mn)||1,w=250/(L.length-1),s=so(t),cl=['var(--ac)','var(--ko)'];S.forEach(function(se,k){var p=se.v.map(function(v,i){return(40+i*w)+','+(150-(v-mn)/r*100)}).join(' ');s+='<polyline fill="none" stroke-width="2.5" points="'+p+'" style="stroke:'+cl[k]+'"/>';se.v.forEach(function(v,i){s+='<circle cx="'+(40+i*w)+'" cy="'+(150-(v-mn)/r*100)+'" r="3.5" style="fill:'+cl[k]+'"/>';if(S.length==1||k==1)s+='<text x="'+(40+i*w)+'" y="'+(142-(v-mn)/r*100)+'" text-anchor="middle" style="fill:var(--tx)">'+v+'</text>'});s+='<text x="'+(40+k*130)+'" y="187" style="fill:'+cl[k]+'">● '+se.n+'</text>'});L.forEach(function(l,i){s+='<text x="'+(40+i*w)+'" y="170" text-anchor="middle" style="fill:var(--mut)">'+l+'</text>'});return s+'</svg>'}
+function G(g,q){q.g=g;return q}
+function calc(inp){var w=el("div","card");w.style.cssText="margin:16px 0 0;padding:12px;background:var(--bg)";w.appendChild(el("div","meta","🧮 Calculatrice"));var d=document.createElement("input");d.type="text";d.setAttribute("inputmode","none");d.setAttribute("autocomplete","off");d.placeholder="0";d.style.cssText="width:100%;margin-bottom:8px;text-align:right;font-size:1.2rem";
+function ev(){var s=d.value.replace(/×/g,"*").replace(/÷/g,"/").replace(/[−–]/g,"-").replace(/,/g,".").replace(/\s/g,"");if(!s||!/^[0-9+\-*\/().]+$/.test(s))return null;try{var r=Function('"use strict";return ('+s+')')();return isFinite(r)?r:null}catch(e){return null}}
+function press(k){if(k==="C")d.value="";else if(k==="⌫")d.value=d.value.slice(0,-1);else if(k==="="){var r=ev();d.value=r===null?"Erreur":String(Math.round(r*1e6)/1e6).replace(".",",")}else{if(d.value==="Erreur")d.value="";d.value+=k}}
+d.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();press("=")}};w.appendChild(d);var g=el("div");g.style.cssText="display:grid;grid-template-columns:repeat(4,1fr);gap:6px";["C","(",")","⌫","7","8","9","÷","4","5","6","×","1","2","3","−","0",",","=","+"].forEach(function(k){var b=el("button","",k);b.style.padding="11px 0";b.onclick=function(){press(k)};g.appendChild(b)});w.appendChild(g);var u=el("button","p","Copier le résultat dans ma réponse");u.style.cssText="width:100%;margin-top:8px";u.onclick=function(){var r=ev();if(r===null){press("=");return}inp.value=String(Math.round(r*100)/100).replace(".",",");inp.focus()};w.appendChild(u);return w}
+var gA=bar('Croissance économique (PIB réel, en %)',['2019','2020','2021','2022','2023'],[2.1,-5.2,4.6,2.0,0.8]);
+var gB=line('IPC d’une économie fictive',['2010','2011','2012','2013','2014'],[{n:'IPC',v:[95.2,96.4,100,101.3,100.5]}]);
+var gC=bar('Population de 15 ans et plus (fictive)',['Emploi','Chômeurs','Inactifs'],[7400,600,4000]);
+var gD=line('PIB nominal vs PIB réel (indice, 2020 = 100)',['2020','2021','2022','2023'],[{n:'Réel',v:[100,101,102,103]},{n:'Nominal',v:[100,106,113,121]}]);
+var gE=bar('Coefficient de Gini (×100)',['Slovaq.','Slovén.','Belg.','Canada','É.-U.','Afr. S.'],[23.2,24.0,26.0,29.9,41.8,63.0]);
+var gF=bar('Taux de chômage par type (%)',['Saisonnier','Frictionnel','Structurel','Conjonct.'],[1.5,2,2.5,3]);
+var gG=line('Taux de chômage (%), économie fictive',['2018','2019','2020','2021','2022'],[{n:'Chômage',v:[5.8,5.7,9.5,7.5,5.3]}]);
+var Q=[
+// ---- Cours 6 : PIB
+M(6,"Que mesure le PIB?",["La richesse et le bien-être d’un pays","La valeur marchande des biens et services finaux produits sur un territoire pendant une période donnée","La répartition des revenus dans la population","Le total des revenus des citoyens d’un pays, où qu’ils produisent"],1,"Le PIB mesure la production. Il ne mesure ni la richesse, ni le bien-être, ni la répartition des richesses."),
+V(6,"Le PIB mesure le bien-être de la population.",0,"Faux : il mesure la production (et indirectement le niveau de vie), mais pas le bien-être."),
+M(6,"Lequel n’est PAS un des quatre éléments clés de la définition du PIB?",["La valeur marchande","Les biens et services finaux","La nationalité du producteur","La période donnée"],2,"Seul le lieu de production compte (frontières du pays), peu importe l’origine du producteur."),
+V(6,"Une usine appartenant à une entreprise étrangère mais située au Québec compte dans le PIB du Canada.",1,"Vrai : on regarde le lieu de production, pas l’origine du producteur."),
+M(6,"Quelle est la formule du PIB selon la méthode des dépenses?",["PIB = C + I + G + (X – M)","PIB = C + I + G + (M – X)","PIB = C + G + X + M","PIB = C + I – G + (X – M)"],0,"C = consommation des ménages, I = investissement des entreprises, G = dépenses gouvernementales, X – M = exportations nettes."),
+N(6,"C = 500, I = 150, G = 200, X = 80, M = 100 (en milliards de $). Quel est le PIB?",830,0,"500 + 150 + 200 + (80 – 100) = 830","milliards $"),
+M(6,"Lequel de ces éléments est EXCLU du PIB?",["Les exportations","Les prestations d’assurance-emploi (paiements de transfert)","Les investissements des entreprises en machinerie","La consommation des ménages"],1,"Exclusions : B&S hors marché, économie souterraine, paiements de transfert, subventions, transactions financières, biens usagés."),
+M(6,"Parmi ces activités, laquelle est comptabilisée dans le PIB?",["Le bénévolat","L’achat d’actions en Bourse","La vente d’une voiture usagée entre deux particuliers","La construction d’un nouveau bâtiment commercial"],3,"Le bénévolat, les transactions financières et les biens usagés sont exclus. Un nouveau bâtiment est un bien final (investissement)."),
+M(6,"Quelle est la différence entre le PIB nominal et le PIB réel?",["Le nominal est en dollars constants, le réel en dollars courants","Le nominal est en dollars courants, le réel élimine l’effet de l’inflation","Le nominal exclut les exportations","Il n’y a aucune différence"],1,"Nominal = prix de l’année courante. Réel = prix d’une année de référence (dollars constants)."),
+V(6,"Une hausse du PIB nominal signifie nécessairement que la production a augmenté.",0,"Faux : elle peut venir uniquement de la hausse des prix. D’où l’importance du PIB réel."),
+M(6,"Quelle est la formule du PIB réel?",["PIB nominal × IIP","PIB nominal ÷ IIP × 100","PIB nominal – IIP","IIP ÷ PIB nominal × 100"],1,"PIB réel = PIB nominal ÷ IIP × 100. L’IIP (déflateur du PIB) vaut 100 à l’année de référence."),
+N(6,"PIB nominal = 450 000 M$ et IIP = 112,5. Quel est le PIB réel (en M$)?",400000,0,"450 000 ÷ 112,5 × 100 = 400 000","M$"),
+N(6,"Pommes : 1 000 à 1 $ et oranges : 2 000 à 1,50 $ en 2012 (base). En 2020 : 900 pommes et 1 500 oranges. Quel est le PIB réel de 2020 (en $ de 2012)?",3150,0,"900 × 1 $ + 1 500 × 1,50 $ = 3 150 $ de 2012. (Le nominal 2020, à 1,25 $ et 2,00 $, donne 4 125 $.)","$"),
+N(6,"Le PIB réel passe de 200 000 à 210 000. Quelle est la croissance économique?",5,0.01,"(210 000 – 200 000) ÷ 200 000 × 100 = 5 %","%"),
+N(6,"Exemple pommes/oranges : le PIB réel passe de 4 000 $ (2012) à 3 150 $ (2020). Quelle est la variation?",-21.25,0.05,"(3 150 – 4 000) ÷ 4 000 × 100 = –21,25 %. Le PIB nominal a pourtant augmenté (4 000 → 4 125) !","%"),
+N(6,"PIB réel du Québec : 367 556 M$ en 2015 et 372 690 M$ en 2016. Quelle est la croissance économique en 2016?",1.40,0.02,"(372 690 – 367 556) ÷ 367 556 × 100 ≈ 1,40 %","%"),
+M(6,"La croissance économique passe de 4 % à 2 %. Que se passe-t-il avec le PIB réel?",["Il diminue de 2 %","Il augmente encore, mais moins vite","Il reste stable","Il y a récession"],1,"Il ne faut pas confondre variation de la croissance et variation du PIB : un taux de 2 % reste positif."),
+V(6,"Une croissance économique de –3 % signifie que le PIB réel a diminué de 3 %.",1,"Vrai : une croissance négative = baisse du PIB réel (récession)."),
+M(6,"Pourquoi une guerre ou une catastrophe naturelle peut-elle faire augmenter le PIB?",["Parce que le PIB mesure le bien-être","À cause des réparations, reconstructions et dépenses en santé","Parce que les prix baissent","Parce que les importations diminuent"],1,"Lacune du PIB : il ne distingue pas les types de production ni leur utilité sociale."),
+M(6,"Quelles sont les trois dimensions de l’IDH (indice de développement humain)?",["Santé, éducation, niveau de vie","PIB, inflation, chômage","Santé, environnement, emploi","Éducation, égalité, liberté"],0,"Créé en 1990 par le PNUD, l’IDH varie de 0 à 1. Le Canada est au 13e rang."),
+M(6,"Que mesure le coefficient de Gini?",["La croissance économique","La répartition des revenus (les inégalités)","Le niveau de bonheur","La qualité de l’environnement"],1,"0 = égalité parfaite, 1 = inégalité parfaite. Plus il est bas, mieux les revenus sont répartis."),
+M(6,"Selon le cours, lequel de ces pays est le plus inégalitaire?",["Canada (29,9)","Belgique (26,0)","États-Unis (41,8)","Slovénie (24,0)"],2,"Plus le Gini est élevé, plus l’inégalité est grande."),
+V(6,"Le PIB par habitant indique qui profite de la richesse produite.",0,"Faux : ce n’est qu’une moyenne. Deux pays peuvent avoir le même PIB/habitant et des inégalités très différentes."),
+M(6,"Qu’est-ce que l’Indice mieux vivre de l’OCDE?",["Un indice fixe basé sur le PIB","Un indice dynamique qui compare le bien-être selon 11 critères et le jugement de l’utilisateur","Un indice mesurant uniquement l’espérance de vie","Un indice de l’inflation"],1,"Il compare le bien-être de 34 pays sur 11 critères; l’utilisateur choisit l’importance de chacun."),
+// ---- Cours 7 : inflation
+M(7,"Quel indicateur mesure l’évolution des prix à la consommation?",["Le PIB","L’IPC (indice des prix à la consommation)","L’IDH","Le coefficient de Gini"],1,"L’IPC mesure le niveau des prix d’un panier de B&S (environ 600 produits, 8 composantes) par rapport à une année de base."),
+V(7,"L’IPC vaut toujours 100 pour l’année de base.",1,"Vrai : c’est un indice en base 100."),
+M(7,"Quelle est la bonne définition de la désinflation?",["Une baisse du niveau moyen des prix","Une hausse plus faible des prix que l’année précédente","Une hausse rapide des prix","Une hausse des salaires"],1,"Déflation = baisse des prix. Désinflation = l’inflation ralentit (ex. 3,7 % → 1,3 %)."),
+N(7,"IPC 2012 = 100 et IPC 2013 = 101,3. Quel est le taux d’inflation en 2013?",1.3,0.02,"(101,3 – 100) ÷ 100 × 100 = 1,3 %","%"),
+N(7,"IPC 2013 = 101,3 et IPC 2014 = 100,5. Quel est le taux d’inflation en 2014? (négatif = déflation)",-0.79,0.02,"(100,5 – 101,3) ÷ 101,3 × 100 ≈ –0,79 % : il y a déflation.","%"),
+M(7,"Le prix du pétrole augmente et fait grimper les coûts de production de plusieurs entreprises. De quel type d’inflation s’agit-il?",["Par la demande","Par les coûts","Importée","Par la masse monétaire"],1,"Hausse des coûts → baisse de l’offre → hausse des prix."),
+M(7,"Une forte inflation aux États-Unis fait augmenter le prix des produits importés au Canada. C’est de l’inflation…",["Par la demande","Par les coûts de main-d’œuvre","Importée","Due à la déflation"],2,"Inflation à l’étranger → hausse du prix des biens importés → inflation à domicile."),
+M(7,"Une banque centrale met beaucoup plus de monnaie en circulation. Quelle est la conséquence probable?",["La monnaie perd de la valeur (inflation)","La monnaie prend de la valeur","Les prix baissent","Rien ne change"],0,"Augmentation de la masse monétaire → baisse de la valeur de la monnaie → inflation."),
+M(7,"Quelle est la formule de la valeur réelle?",["Valeur nominale × (IPC final ÷ IPC initial)","Valeur nominale × (IPC initial ÷ IPC final)","Valeur nominale – IPC","Valeur nominale ÷ 100"],0,"Valeur réelle = valeur nominale × IPC final ÷ IPC initial : on exprime tout en dollars de l’année finale."),
+N(7,"Un pudding coûtait 0,99 $ en 2015 (IPC = 126,6). Quelle est sa valeur réelle en dollars de 2021 (IPC = 141,6)?",1.11,0.01,"0,99 × 141,6 ÷ 126,6 ≈ 1,11 $. Comme il coûte 1,25 $ en 2021, son prix a augmenté plus vite que l’inflation.","$"),
+N(7,"Tu places ton argent à 2 % et l’inflation est de 8 %. Quel est le taux d’intérêt réel?",-6,0,"Taux réel = taux nominal – inflation = 2 – 8 = –6 %. Tu perds du pouvoir d’achat.","%"),
+V(7,"Si mon salaire augmente de 2 % et que l’inflation est de 5 %, mon pouvoir d’achat diminue.",1,"Vrai : pour conserver son pouvoir d’achat, la hausse du revenu doit au moins égaler l’inflation."),
+M(7,"Pourquoi préfère-t-on une inflation basse et stable à la déflation?",["Parce que la déflation fait monter les salaires","Parce que la déflation incite à retarder les dépenses, ce qui ralentit l’économie et crée du chômage","Parce que la déflation augmente les exportations","Parce que l’inflation réduit le PIB"],1,"En déflation : moins de consommation, moins d’investissement, baisse des revenus des entreprises, ralentissement, chômage."),
+// ---- Cours 8 : marché du travail
+V(8,"Un proche aidant qui reste à la maison pour s’occuper d’un membre de sa famille est un chômeur.",0,"Faux : il ne cherche pas d’emploi, donc il est inactif."),
+M(8,"Une étudiante au collégial qui demeure chez ses parents et ne cherche pas d’emploi est…",R,1,"Elle a plus de 15 ans, ne travaille pas et ne cherche pas d’emploi : inactive."),
+M(8,"Un élève du primaire fait partie de…",R,0,"Les moins de 15 ans sont exclus de la population de 15 ans et plus."),
+M(8,"Votre tante Denise, longtemps au foyer, cherche maintenant activement un emploi. Elle est…",R,2,"Sans emploi mais en recherche active : chômeuse (donc dans la population active)."),
+M(8,"Que contient la population active?",["Les chômeurs seulement","Les personnes en emploi seulement","Les personnes en emploi et les chômeurs","Toute la population de 15 ans et plus"],2,"Population active = personnes en emploi + chômeurs (disponibles et désirant travailler)."),
+M(8,"Par quoi divise-t-on pour calculer le taux de chômage?",["La population totale","La population de 15 ans et plus","La population active","La population inactive"],2,"Taux de chômage = chômeurs ÷ population active × 100."),
+N(8,"Population active = 8 000, chômeurs = 600. Quel est le taux de chômage?",7.5,0.05,"600 ÷ 8 000 × 100 = 7,5 %","%"),
+N(8,"Population de 15 ans et plus = 12 000 et population active = 8 000. Quel est le taux d’activité? (arrondi à 0,1)",66.7,0.06,"Taux d’activité = population active ÷ population de 15 ans et plus × 100 = 66,7 %","%"),
+N(8,"Population de 15 ans et plus = 12 000, personnes en emploi = 7 400. Quel est le taux d’emploi? (arrondi à 0,1)",61.7,0.06,"Taux d’emploi = personnes en emploi ÷ population de 15 ans et plus × 100 ≈ 61,7 %","%"),
+N(8,"Sur 7 400 personnes en emploi, 1 850 travaillent à temps partiel. Quel est le taux d’emploi à temps partiel?",25,0.05,"1 850 ÷ 7 400 × 100 = 25 % (le dénominateur est le nombre de personnes occupées).","%"),
+M(8,"Pourquoi les travailleurs découragés faussent-ils le taux de chômage?",["Ils passent de chômeurs à inactifs, ce qui fait baisser le taux sans création d’emplois","Ils sont comptés deux fois","Ils passent de l’emploi au chômage","Ils font augmenter la population active"],0,"Un travailleur découragé arrête de chercher : il quitte la population active, et le taux de chômage baisse sans que l’emploi n’augmente."),
+M(8,"Quelle est la 2e limite du taux de chômage mentionnée dans le cours?",["Les étudiants à temps plein","Le travail à temps partiel involontaire","Le travail saisonnier","Les retraités"],1,"Une personne qui voudrait un temps plein mais n’a qu’un temps partiel est comptée « en emploi »."),
+M(8,"Des travailleurs de la construction sont sans emploi pendant l’hiver. Quel type de chômage?",T,0,"Saisonnier : lié aux contraintes saisonnières (statistiques souvent désaisonnalisées)."),
+M(8,"Une nouvelle diplômée cherche son premier emploi. Quel type de chômage?",T,1,"Frictionnel : mobilité normale de la main-d’œuvre, généralement de court terme."),
+M(8,"L’automatisation des chaînes de montage laisse des travailleurs sans les compétences recherchées. Quel type de chômage?",T,2,"Structurel : inadéquation entre les compétences offertes et les besoins des employeurs."),
+M(8,"Une entreprise ferme ses portes durant une récession. Quel type de chômage?",T,3,"Conjoncturel : lié aux fluctuations du cycle économique."),
+M(8,"Quel type de chômage est nul en situation de plein-emploi?",["Saisonnier","Frictionnel","Structurel","Conjoncturel"],3,"Au plein-emploi, il reste du chômage saisonnier, frictionnel et structurel (le chômage naturel)."),
+N(8,"Le taux de chômage est de 9 % et le taux de chômage naturel de 6 %. Quel est le taux de chômage conjoncturel?",3,0,"Chômage naturel = saisonnier + frictionnel + structurel. Conjoncturel = 9 – 6 = 3 %.","%"),
+V(8,"Il peut y avoir plein-emploi même si le taux de chômage n’est pas de 0 %.",1,"Vrai : le taux de chômage naturel (environ 6 % au Canada selon le cours) subsiste."),
+// ---- Graphiques
+G(gA,M(6,"D’après le graphique, quelle année correspond à une récession?",["2019","2020","2021","2023"],1,"Croissance négative (–5,2 %) = baisse du PIB réel = récession.")),
+G(gA,M(6,"La croissance passe de 4,6 % (2021) à 2,0 % (2022). Que peut-on conclure?",["Le PIB réel a diminué en 2022","Le PIB réel a encore augmenté en 2022, mais moins vite","Il y a eu récession en 2022","Les prix ont baissé en 2022"],1,"Une croissance de 2 % reste positive : le PIB réel augmente encore.")),
+G(gA,N(6,"Selon le graphique, le PIB réel de 2021 est de 1 000 M$. Quel est le PIB réel de 2022 (en M$)?",1020,0.5,"1 000 × (1 + 0,02) = 1 020 M$","M$")),
+G(gB,M(7,"D’après le graphique, quelle année connaît une déflation?",["2011","2012","2013","2014"],3,"En 2014 l’IPC baisse (101,3 → 100,5) : le niveau moyen des prix diminue.")),
+G(gB,M(7,"D’après le graphique, quelle année a le taux d’inflation le plus élevé?",["2011","2012","2013","2014"],1,"2012 : (100 – 96,4) ÷ 96,4 ≈ 3,73 %, contre 1,26 % en 2011 et 1,3 % en 2013.")),
+G(gB,N(7,"À partir du graphique, calcule le taux d’inflation en 2011 (arrondi à 0,01).",1.26,0.02,"(96,4 – 95,2) ÷ 95,2 × 100 ≈ 1,26 %","%")),
+G(gC,N(8,"À partir du graphique, quel est le taux de chômage? (population active = emploi + chômeurs)",7.5,0.05,"600 ÷ (7 400 + 600) × 100 = 7,5 %","%")),
+G(gC,N(8,"À partir du même graphique, quel est le taux d’activité? (arrondi à 0,1)",66.7,0.06,"8 000 ÷ 12 000 × 100 ≈ 66,7 % (population de 15 ans et plus = 7 400 + 600 + 4 000)","%")),
+G(gD,M(6,"Pourquoi la courbe du PIB nominal s’éloigne-t-elle de celle du PIB réel?",["À cause de la hausse des prix (inflation)","À cause d’une baisse de la production","À cause du chômage","À cause des exportations"],0,"Le PIB réel élimine l’effet des prix; l’écart représente la portion inflationniste du PIB nominal.")),
+G(gD,N(6,"D’après le graphique, quelle est la croissance économique entre 2022 et 2023? (arrondi à 0,01)",0.98,0.02,"(103 – 102) ÷ 102 × 100 ≈ 0,98 % (on utilise le PIB réel).","%")),
+G(gE,M(6,"D’après le graphique, quel pays a la répartition des revenus la plus égalitaire?",["Slovaquie","Canada","États-Unis","Afrique du Sud"],0,"Plus le coefficient de Gini est bas, plus les revenus sont bien répartis.")),
+G(gE,N(6,"Quel est l’écart de coefficient de Gini entre les États-Unis et le Canada?",11.9,0.05,"41,8 – 29,9 = 11,9","points")),
+G(gF,N(8,"Selon le graphique, quel est le taux de chômage naturel? (saisonnier + frictionnel + structurel)",6,0,"1,5 + 2 + 2,5 = 6 %. Le chômage total est de 9 % avec le conjoncturel.","%")),
+G(gF,M(8,"En situation de plein-emploi, quelle composante du graphique disparaît?",["Saisonnier","Frictionnel","Structurel","Conjoncturel"],3,"Au plein-emploi, il n’y a aucun chômage conjoncturel.")),
+G(gG,M(8,"La hausse du taux de chômage de 2019 à 2020 s’explique surtout par un chômage…",["Saisonnier","Frictionnel","Structurel","Conjoncturel"],3,"Une hausse brutale liée à une crise économique est typiquement conjoncturelle.")),
+// ---- Questions supplémentaires
+M(6,"Une baisse du PIB réel d’une période à l’autre s’appelle…",["Une croissance","Une récession","Une inflation","Une désinflation"],1,"Augmentation = croissance économique; diminution = récession."),
+V(6,"Les subventions aux entreprises sont comptabilisées dans le PIB.",0,"Faux : les subventions, comme les paiements de transfert, sont exclues."),
+M(6,"Lequel de ces problèmes est invoqué par les partisans de la décroissance?",["Les changements climatiques","La hausse des salaires","La baisse du chômage","La hausse de l’espérance de vie"],0,"Climat, inégalités et pénuries de ressources."),
+M(6,"Un IIP de 108,9 (année de référence = 100) signifie que…",["Les prix sont en moyenne 8,9 % plus élevés qu’à l’année de référence","La production a augmenté de 8,9 %","Le PIB a augmenté de 108,9 %","Les prix ont baissé de 8,9 %"],0,"L’IIP exprime la moyenne des prix courants en % des prix de l’année de référence."),
+N(6,"PIB nominal du Québec en 2017 : 417 244 M$; IIP : 108,9. Quel est le PIB réel (en M$, à l’unité près)?",383144,1,"417 244 ÷ 108,9 × 100 ≈ 383 144","M$"),
+N(6,"PIB réel du Québec : 372 690 M$ en 2016 et 383 144 M$ en 2017. Quelle est la croissance en 2017?",2.81,0.02,"(383 144 – 372 690) ÷ 372 690 × 100 ≈ 2,81 %","%"),
+V(6,"Un coefficient de Gini de 1 correspond à une égalité parfaite.",0,"Faux : 1 = inégalité parfaite, 0 = égalité parfaite."),
+N(6,"Selon le cours, quelle part de la richesse (en %) détient environ le 1 % des plus riches au Canada?",25,0,"Environ 25 % de la richesse.","%"),
+N(6,"Pour un IDH optimal (= 1), quelle est l’espérance de vie de référence (en années)?",85,0,"IDH = 1 : espérance de vie de 85 ans, scolarisation moyenne de 15 ans, attendue de 18 ans, revenu moyen de 75 000 $.","ans"),
+N(7,"IPC 2011 = 96,4 et IPC 2012 = 100. Quel est le taux d’inflation en 2012 (arrondi à 0,01)?",3.73,0.02,"(100 – 96,4) ÷ 96,4 × 100 ≈ 3,73 %","%"),
+V(7,"Une inflation qui passe de 3 % à 1 % est une déflation.",0,"Faux : les prix augmentent encore, mais plus lentement. C’est de la désinflation."),
+N(7,"Avatar (2010) : 2 850 M$US nominaux, IPC 2010 = 85,3. Quelle est la valeur réelle en $ de 2019 (IPC = 100), en M$ à l’unité près?",3341,2,"2 850 × 100 ÷ 85,3 ≈ 3 341 M$","M$"),
+N(7,"Environ combien de produits contient le panier de l’IPC?",600,0,"Environ 600 produits, regroupés en 8 composantes principales.",""),
+N(7,"Taux d’intérêt nominal de 5 % et inflation de 3 %. Quel est le taux d’intérêt réel?",2,0,"5 – 3 = 2 %","%"),
+M(7,"En 1940 : salaire horaire de 2 $ et trio Big Mac à 2 $. En 2022 : 15 $ et 15 $. Que conclure?",["Le pouvoir d’achat en Big Mac est resté le même","Le pouvoir d’achat a fortement baissé","Le pouvoir d’achat a été multiplié par 7,5","L’inflation était nulle"],0,"Salaire et prix ont été multipliés par 7,5 : une heure de travail achète toujours un trio."),
+V(8,"Les membres des Forces armées canadiennes sont exclus de la population de 15 ans et plus de l’enquête.",1,"Vrai : comme les réserves autochtones et les régions extrêmement éloignées."),
+M(8,"Lequel de ces exemples fait partie de la population inactive?",["Un retraité","Un commis de quincaillerie","Une personne sans emploi qui cherche activement","Un travailleur à temps partiel"],0,"Inactifs : retraités, bénévoles, étudiants, personnes au foyer, personnes inaptes au travail."),
+V(8,"Un étudiant à temps plein qui cherche activement un emploi est un chômeur.",1,"Vrai : sans emploi et en recherche active = chômeur."),
+N(8,"Canada, avril 2025 : 1 548 100 chômeurs et population active de 22 517 400. Taux de chômage (arrondi à 0,1)?",6.9,0.06,"1 548 100 ÷ 22 517 400 × 100 ≈ 6,9 %","%"),
+N(8,"Population active : 22 517 400; population de 15 ans et plus : 34 493 600. Taux d’activité (arrondi à 0,1)?",65.3,0.06,"22 517 400 ÷ 34 493 600 × 100 ≈ 65,3 %","%"),
+N(8,"20 969 300 personnes en emploi sur 34 493 600 (15 ans et plus). Taux d’emploi (arrondi à 0,1)?",60.8,0.06,"20 969 300 ÷ 34 493 600 × 100 ≈ 60,8 %","%"),
+N(8,"Sur 20 969 300 personnes en emploi, 3 833 600 sont à temps partiel. Taux d’emploi à temps partiel (arrondi à 0,1)?",18.3,0.06,"3 833 600 ÷ 20 969 300 × 100 ≈ 18,3 %","%")
+];
+var app=document.getElementById("app");
+var st={};
+function sh(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+var CN={6:"Cours 6 · PIB",7:"Cours 7 · Inflation",8:"Cours 8 · Marché du travail"};
+function setup(){
+  app.innerHTML="";
+  var c=el("div","card");
+  c.appendChild(el("b","","Chapitres"));
+  [6,7,8].forEach(function(n){
+    var l=el("label","row"),i=document.createElement("input");
+    i.type="checkbox";i.checked=true;i.value=n;i.className="chap";
+    l.appendChild(i);
+    var cnt=Q.filter(function(q){return q.c===n}).length;
+    l.appendChild(el("span","",CN[n]+" ("+cnt+" questions)"));
+    c.appendChild(l);
+  });
+  var l1=el("label","row");var s=document.createElement("select");s.id="nb";
+  [["10","10 questions"],["20","20 questions"],["30","30 questions"],["60","60 questions"],["0","Toutes"]].forEach(function(o){var p=document.createElement("option");p.value=o[0];p.textContent=o[1];s.appendChild(p)});
+  s.value="20";l1.appendChild(el("span","","Nombre : "));l1.appendChild(s);c.appendChild(l1);
+  var l2=el("label","row"),m1=document.createElement("input");m1.type="checkbox";m1.checked=true;m1.id="shq";l2.appendChild(m1);l2.appendChild(el("span","","Mélanger les questions"));c.appendChild(l2);
+  var l3=el("label","row"),m2=document.createElement("input");m2.type="checkbox";m2.checked=true;m2.id="sho";l3.appendChild(m2);l3.appendChild(el("span","","Mélanger les choix de réponse"));c.appendChild(l3);
+  var b=el("button","p","Commencer");b.style.marginTop="12px";
+  b.onclick=function(){
+    var ch=[].slice.call(document.querySelectorAll(".chap")).filter(function(i){return i.checked}).map(function(i){return +i.value});
+    if(!ch.length){alert("Choisis au moins un chapitre.");return}
+    var pool=Q.filter(function(q){return ch.indexOf(q.c)>-1});
+    if(m1.checked)pool=sh(pool);
+    var n=+s.value;if(n&&n<pool.length)pool=pool.slice(0,n);
+    st.sho=m2.checked;st.shq=m1.checked;start(pool);
+  };
+  c.appendChild(b);app.appendChild(c);
+}
+function start(pool){st.pool=pool;st.i=0;st.score=0;st.wrong=[];show()}
+function show(){
+  app.innerHTML="";
+  var q=st.pool[st.i];
+  var bar=el("div","bar");var f=document.createElement("i");f.style.width=(st.i/st.pool.length*100)+"%";bar.appendChild(f);app.appendChild(bar);
+  var c=el("div","card");
+  var mt=el("div","meta");mt.appendChild(el("span","","Question "+(st.i+1)+" / "+st.pool.length));mt.appendChild(el("span","tag",CN[q.c]));c.appendChild(mt);
+  c.appendChild(el("p","q",q.q));
+  if(q.g){var gd=el("div");gd.innerHTML=q.g;c.appendChild(gd)}
+  var fb=el("div","fb hid");
+  var nxt=el("button","p hid",st.i+1<st.pool.length?"Question suivante":"Voir les résultats");
+  nxt.style.marginTop="12px";nxt.onclick=function(){st.i++;st.i<st.pool.length?show():end()};
+  function done(ok){
+    if(ok)st.score++;else st.wrong.push(q);
+    fb.className="fb "+(ok?"ok":"ko");
+    fb.textContent=(ok?"✓ Bonne réponse. ":"✗ Pas tout à fait. ")+q.e;
+    nxt.classList.remove("hid");nxt.focus();
+  }
+  if(q.n!==undefined){
+    var row=el("div");var inp=document.createElement("input");inp.type="text";inp.setAttribute("inputmode","decimal");inp.placeholder="Ta réponse";
+    var mb=el("button","","±");mb.title="Mettre ou enlever le signe moins";mb.style.marginRight="6px";mb.onclick=function(){var t=inp.value.replace(/^[-−–]\s*/,"");inp.value=(t===inp.value?"-":"")+t;inp.focus()};row.appendChild(mb);row.appendChild(inp);if(q.u)row.appendChild(el("span","sub"," "+q.u));
+    var ok=el("button","p","Valider");ok.style.marginLeft="8px";
+    var go=function(){
+      var v=parseFloat(inp.value.replace(/[−–]/g,"-").replace(/\s/g,"").replace(",","."));
+      if(isNaN(v)){inp.focus();return}
+      inp.disabled=true;ok.disabled=true;
+      var good=Math.abs(v-q.n)<=Math.max(q.t,1e-9)+1e-9;
+      fb.classList.remove("hid");done(good);
+      if(!good)fb.textContent+=" (Réponse attendue : "+String(q.n).replace(".",",")+")";
+    };
+    ok.onclick=go;inp.onkeydown=function(e){if(e.key==="Enter")go()};
+    row.appendChild(ok);c.appendChild(row);c.appendChild(calc(inp));setTimeout(function(){inp.focus()},0);
+  }else{
+    var opts=q.o.map(function(t,i){return{t:t,i:i}});
+    if(st.sho&&!q.f)opts=sh(opts);
+    var btns=[];
+    opts.forEach(function(o){
+      var b=el("button","opt",o.t);btns.push([b,o.i]);
+      b.onclick=function(){
+        btns.forEach(function(p){p[0].disabled=true;if(p[1]===q.a)p[0].classList.add("ok")});
+        if(o.i!==q.a)b.classList.add("ko");
+        fb.classList.remove("hid");done(o.i===q.a);
+      };
+      c.appendChild(b);
+    });
+  }
+  c.appendChild(fb);c.appendChild(nxt);app.appendChild(c);
+}
+function end(){
+  app.innerHTML="";
+  var n=st.pool.length,p=Math.round(st.score/n*100);
+  var c=el("div","card");
+  c.appendChild(el("div","meta","Résultat"));
+  c.appendChild(el("div","big",st.score+" / "+n+" ("+p+" %)"));
+  c.appendChild(el("p","",p>=85?"Excellent, tu maîtrises la matière !":p>=65?"Bien, révise les points ci-dessous.":"À retravailler : relis les diapos puis refais le quiz."));
+  var b1=el("button","p","Refaire mes erreurs");b1.onclick=function(){st.sho&&0;start(st.shq?sh(st.wrong):st.wrong)};
+  if(!st.wrong.length)b1.classList.add("hid");
+  var b2=el("button","","Nouveau quiz");b2.style.marginLeft="8px";b2.onclick=setup;
+  c.appendChild(b1);c.appendChild(b2);app.appendChild(c);
+  if(st.wrong.length){
+    var w=el("div","card");w.appendChild(el("b","","À revoir ("+st.wrong.length+")"));
+    st.wrong.forEach(function(q){
+      var d=el("div","err");d.appendChild(el("div","",q.q));
+      var a=el("div","");a.style.color="var(--mut)";a.textContent="→ "+q.e;d.appendChild(a);w.appendChild(d);
+    });
+    app.appendChild(w);
+  }
+}
+setup();
+</script>
+</body>
+</html>
